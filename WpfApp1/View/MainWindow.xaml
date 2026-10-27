@@ -7,12 +7,14 @@
         Title="Система ввода рейтинга"
         ResizeMode="CanResize"
         Width="900" Height="600"
-        WindowStartupLocation="CenterScreen">
+        MinWidth="750" MinHeight="450"
+        WindowStartupLocation="CenterScreen"
+        Style="{StaticResource {x:Type Window}}">
 
     <Grid Margin="16">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>   <!-- шапка с преподавателем -->
-            <RowDefinition Height="*"/>      <!-- дисциплины + таблица -->
+            <RowDefinition Height="*"/>      <!-- дисциплины таблица -->
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="260"/>  <!-- список дисциплин -->
@@ -88,7 +90,7 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
-                <DataGrid Grid.Row="2" ItemsSource="{Binding Students}">
+                <DataGrid Grid.Row="2" ItemsSource="{Binding Students}" SelectionUnit="Cell">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Студент" Binding="{Binding FullName}" IsReadOnly="True" Width="*"/>
                         <DataGridTextColumn Header="КТ1" Binding="{Binding Kt1, UpdateSourceTrigger=PropertyChanged}" Width="70"/>

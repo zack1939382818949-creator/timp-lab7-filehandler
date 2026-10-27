@@ -1,4 +1,5 @@
 using System.Windows;
+using WpfApp1.Models;
 using WpfApp1.ViewModel;
 
 namespace WpfApp1.View
@@ -9,18 +10,15 @@ namespace WpfApp1.View
         {
             InitializeComponent();
             PasswordViewModel viewModel = new();
-            
+
             DataContext = viewModel;
- 
+
             viewModel.PasswordAccepted += OnPasswordAccepted;
-
-
-
         }
 
-        private void OnPasswordAccepted()
+        private void OnPasswordAccepted(Teacher teacher)
         {
-            new MainWindow().Show();
+            new MainWindow(teacher).Show();
             Close();
         }
     }

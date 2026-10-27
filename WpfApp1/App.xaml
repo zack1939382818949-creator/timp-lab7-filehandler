@@ -7,13 +7,6 @@
 
 
 
-        <Style x:Key="WINDOW" TargetType="Window">
-            <Setter Property="Background" Value="WhiteSmoke"/>
-
-
-
-
-        </Style>
         
         
         
@@ -78,7 +71,6 @@
                             
                             <Trigger Property="IsEnabled" Value="False">
                                 <Setter TargetName="bd" Property="Opacity" Value="0.5"/>
-                                <Setter TargetName="bd" Property="Background" Value="{StaticResource BackgroundBrush}"/>
                             </Trigger>
 
                             <Trigger Property="IsMouseOver" Value="True">

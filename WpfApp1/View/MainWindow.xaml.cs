@@ -1,13 +1,7 @@
-﻿using System.Text;
+﻿using System.ComponentModel;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using WpfApp1.Models;
+using WpfApp1.ViewModel;
 
 namespace WpfApp1.View
 {
@@ -16,10 +10,20 @@ namespace WpfApp1.View
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        private readonly MainViewModel _viewModel;
+
+        public MainWindow(Teacher teacher)
         {
             InitializeComponent();
-            DataContext = new MainViewModel();
+            _viewModel = new MainViewModel(teacher);
+            DataContext = _viewModel;
+        }
+
+        // не даём закрыть окно с несохранённым рейтингом без вопроса
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            if (!_viewModel.ConfirmClose()) e.Cancel = true;
+            base.OnClosing(e);
         }
     }
 }

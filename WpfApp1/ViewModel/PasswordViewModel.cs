@@ -1,14 +1,18 @@
-using System;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System;
+using System.Windows;
+using WpfApp1.Models;
+using WpfApp1.Services;
 
 namespace WpfApp1.ViewModel
 {
     public partial class PasswordViewModel : ObservableObject
 
     {
-        private Dictionary<string, string> _logins = new Dictionary<string, string>() { ["vas"] = "11111", ["vas32"] = "12345" };
-        public event Action? PasswordAccepted;
+        private readonly FileDataService _dataService = new();
+
+        public event Action<Teacher>? PasswordAccepted;
 
 
 
@@ -28,15 +32,34 @@ namespace WpfApp1.ViewModel
 
 
         [RelayCommand(CanExecute = nameof(CanLogin))]
-        private void Logining() { if (_logins.TryGetValue(Login, out var storedPassword) && storedPassword == _password) { StatusMessage = "Login successful!"; PasswordAccepted?.Invoke(); } else { StatusMessage = "Invalid login or password."; } }
+        private void Logining()
+        {
+            if (!_dataService.TeachersFileExists) { StatusMessage = "Файл данных не найден."; return; }
 
-        private bool CanLogin() => !string.IsNullOrWhiteSpace(Login) && !string.IsNullOrWhiteSpace(_password);
+            List<Teacher> teachers = _dataService.LoadTeachers();
+
+           
+            Teacher? found = teachers.FirstOrDefault(t =>
+                string.Equals(t.Login, Login.Trim(), StringComparison.OrdinalIgnoreCase)
+                && string.Equals(t.Password, Password, StringComparison.Ordinal));
+
+            if (found != null)
+            {
+                StatusMessage = "Вход выполнен";
+                PasswordAccepted?.Invoke(found);
+            }
+            else
+            {
+                StatusMessage = "Неверный логин или пароль";
+                MessageBox.Show("Неверный логин или пароль!", "Предупреждение",
+                                MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
+        private bool CanLogin() => !string.IsNullOrWhiteSpace(Login) && !string.IsNullOrWhiteSpace(Password);
 
         [RelayCommand(CanExecute = nameof(CanLogin))]
         private void ClearInput() { Login = ""; Password = ""; StatusMessage = ""; }
-
-
-
 
 
     }
